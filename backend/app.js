@@ -152,3 +152,17 @@ app.post('/admin/vklad', authenticateToken, (req, res) => {
         res.send('Payment recorded');
     });
 });
+// Get user info
+app.get('/user', authenticateToken, (req, res) => {
+    db.query('SELECT username FROM users WHERE id = ?', [req.user.id], (err, results) => {
+        if (err) return res.status(500).send(err);
+        
+        // If the user is found, return the username; otherwise, return a 404
+        if (results.length > 0) {
+            res.json(results[0]); // Return the user information
+        } else {
+            res.status(404).send('User not found');
+        }
+    });
+});
+
