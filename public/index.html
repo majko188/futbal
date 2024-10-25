@@ -6,6 +6,54 @@
     <title>Futbalová aplikácia</title>
 </head>
 <body>
+<h1>Vitaj v aplikácii na sledovanie účasti na futbale!</h1>
+
+  <!-- Sekcia na vytváranie nového používateľa -->
+  <section id="create-user-section">
+    <h2>Vytvoriť nového používateľa</h2>
+    <form id="create-user-form">
+      <label for="username">Používateľské meno:</label>
+      <input type="text" id="username" name="username" required>
+
+      <label for="password">Heslo:</label>
+      <input type="password" id="password" name="password" required>
+
+      <button type="submit">Vytvoriť používateľa</button>
+    </form>
+    <p id="create-user-message"></p>
+  </section>
+
+  <script>
+    // Funkcia na odoslanie požiadavky na vytvorenie nového používateľa
+    document.getElementById('create-user-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+      try {
+        const response = await fetch('/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+          document.getElementById('create-user-message').textContent = 'Používateľ bol úspešne vytvorený!';
+        } else {
+          const errorData = await response.json();
+          document.getElementById('create-user-message').textContent = 'Chyba: ' + (errorData.message || 'Nepodarilo sa vytvoriť používateľa.');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        document.getElementById('create-user-message').textContent = 'Chyba: Nepodarilo sa pripojiť k serveru.';
+      }
+    });
+  </script>
+
+    
     <h1>Prihlásenie</h1>
     <form id="loginForm">
         <input type="text" id="username" placeholder="Používateľské meno" required>
