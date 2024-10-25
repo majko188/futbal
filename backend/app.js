@@ -6,7 +6,7 @@ const path = require('path'); // Import pre path
 const app = express();
 const port = 3000;
 
-pp.use(express.json());
+app.use(express.json());
 app.use(express.static(path.join(__dirname, '../frontend'))); // Slúži na obsluhovanie statických súborov z priečinka "frontend"
 
 // Route pre zobrazenie index.html
