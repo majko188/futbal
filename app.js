@@ -6,6 +6,7 @@ const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(express.static('public')); // Slúži na obsluhovanie statických súborov z priečinka "public"
 
 const db = mysql.createConnection({
   host: 'sql7.freemysqlhosting.net',
@@ -21,10 +22,6 @@ db.connect((err) => {
     return;
   }
   console.log('Connected to database.');
-});
-
-app.get('/', (req, res) => {
-  res.send('Aplikácia beží!');
 });
 
 // Middleware na overenie tokenu
