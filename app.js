@@ -15,6 +15,18 @@ const db = mysql.createConnection({
   port: 3306
 });
 
+db.connect((err) => {
+  if (err) {
+    console.error('Database connection failed:', err.stack);
+    return;
+  }
+  console.log('Connected to database.');
+});
+
+app.get('/', (req, res) => {
+  res.send('Aplikácia beží!');
+});
+
 // Middleware na overenie tokenu
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
