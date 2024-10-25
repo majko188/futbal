@@ -1,0 +1,30 @@
+
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>User Dashboard</title>
+                <link rel="stylesheet" href="style.css">
+            </head>
+            <body>
+                <div class="container">
+                    <h1>User Dashboard</h1>
+                    <p>Submit your response for the poll below:</p>
+                    <form id="poll-form">
+                        <label><input type="radio" name="response" value="pridem"> Prídem</label>
+                        <label><input type="radio" name="response" value="nepridem"> Neprídem</label>
+                        <label><input type="radio" name="response" value="mam hraca navyše"> Mám hráča navyše</label>
+                        <button type="submit">Submit</button>
+                    </form>
+
+                    <h2>Current Poll Status</h2>
+                    <div id="poll-status"></div>
+
+                    <h2>My Financial Status</h2>
+                    <div id="financial-status"></div>
+                </div>
+                <script src="script.js"></script>
+            </body>
+            </html>
+        

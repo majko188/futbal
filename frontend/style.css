@@ -1,0 +1,28 @@
+
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f5f5f5;
+                color: #333;
+            }
+            .container {
+                max-width: 800px;
+                margin: 20px auto;
+                padding: 20px;
+                background-color: white;
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            }
+            h1, h2 {
+                color: #007BFF;
+            }
+            .button {
+                background-color: #007BFF;
+                color: white;
+                padding: 10px 20px;
+                text-decoration: none;
+                border-radius: 5px;
+                display: inline-block;
+                margin-top: 10px;
+            }
+        
