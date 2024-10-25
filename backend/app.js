@@ -116,3 +116,39 @@ app.post('/admin/anketa', authenticateToken, (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+// Middleware na overenie tokenu a admin prístup
+function authenticateToken(req, res, next) {
+    const token = req.headers['authorization'];
+    if (!token) return res.sendStatus(401);
+
+    jwt.verify(token, 'secret_key', (err, user) => {
+        if (err) return res.sendStatus(403);
+        req.user = user;
+
+        // Check if the user is an admin
+        db.query('SELECT * FROM users WHERE id = ?', [user.id], (err, results) => {
+            if (err) return res.status(500).send(err);
+            if (results.length === 0 || results[0].username !== 'admin') {
+                return res.sendStatus(403); // Forbidden
+            }
+            next();
+        });
+    });
+}
+// Admin creates a new survey
+app.post('/admin/anketa', authenticateToken, (req, res) => {
+    const { date } = req.body;
+    db.query('INSERT INTO ankety (date, status) VALUES (?, "active")', [date], (err) => {
+        if (err) return res.status(500).send(err);
+        res.send('Survey created');
+    });
+});
+
+// Admin adds payment
+app.post('/admin/vklad', authenticateToken, (req, res) => {
+    const { userId, suma } = req.body;
+    db.query('INSERT INTO platby (user_id, suma) VALUES (?, ?)', [userId, suma], (err) => {
+        if (err) return res.status(500).send(err);
+        res.send('Payment recorded');
+    });
+});
