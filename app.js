@@ -8,10 +8,11 @@ const port = 3000;
 app.use(express.json());
 
 const db = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',    // Zadaj svoje prihlasovacie údaje
-  password: '',
-  database: 'futbal_db'
+  host: 'sql7.freemysqlhosting.net',
+  user: 'sql7740631',
+  password: 'P4YdmNmYyr',
+  database: 'sql7740631',
+  port: 3306
 });
 
 // Middleware na overenie tokenu
