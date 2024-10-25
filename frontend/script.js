@@ -1,4 +1,4 @@
-document.getElementById('loginForm').addEventListener('submit', async function(event) {
+document.getElementById('login-form').addEventListener('submit', async function(event) {
   event.preventDefault(); // Prevent the default form submission
 
   const username = document.getElementById('username').value;
