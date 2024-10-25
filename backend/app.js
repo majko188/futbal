@@ -8,6 +8,11 @@ const port = 3000;
 app.use(express.json());
 app.use(express.static('public')); // Slúži na obsluhovanie statických súborov
 
+// Route pre zobrazenie index.html
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Uprav na správnu cestu
+});
+
 const db = require('./database'); // Import databázy
 
 db.connect((err) => {
