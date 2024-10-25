@@ -22,10 +22,8 @@ db.connect((err) => {
     return;
   }
   console.log('Connected to database.');
-});
-
-
- // Skontroluj, či existuje admin používateľ
+  
+  // Skontroluj, či existuje admin používateľ
   const adminUsername = 'admin';
   const adminPassword = 'Futbal123';
 
