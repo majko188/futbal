@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const mysql = require('mysql2');
+const path = require('path'); // Import pre path
 const app = express();
 const port = 3000;
 
