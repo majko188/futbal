@@ -6,12 +6,12 @@ const path = require('path'); // Import pre path
 const app = express();
 const port = 3000;
 
-app.use(express.json());
-app.use(express.static('public')); // Slúži na obsluhovanie statických súborov
+pp.use(express.json());
+app.use(express.static(path.join(__dirname, '../frontend'))); // Slúži na obsluhovanie statických súborov z priečinka "frontend"
 
 // Route pre zobrazenie index.html
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html')); // Uprav na správnu cestu
+  res.sendFile(path.join(__dirname, '../frontend', 'index.html')); // Uprav na správnu cestu
 });
 
 const db = require('./database'); // Import databázy
