@@ -24,6 +24,25 @@ db.connect((err) => {
   console.log('Connected to database.');
 });
 
+
+ // Skontroluj, či existuje admin používateľ
+  const adminUsername = 'admin';
+  const adminPassword = 'Futbal123';
+
+  db.query('SELECT * FROM users WHERE username = ?', [adminUsername], (err, results) => {
+    if (err) throw err;
+
+    if (results.length === 0) {
+      // Ak admin neexistuje, vytvor ho
+      const hashedPassword = bcrypt.hashSync(adminPassword, 10);
+      db.query('INSERT INTO users (username, password) VALUES (?, ?)', [adminUsername, hashedPassword], (err) => {
+        if (err) throw err;
+        console.log('Admin user created with username:', adminUsername);
+      });
+    }
+  });
+});
+
 // Middleware na overenie tokenu
 function authenticateToken(req, res, next) {
   const token = req.headers['authorization'];
