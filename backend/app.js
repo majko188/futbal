@@ -5,27 +5,29 @@ const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/poll');
 const financeRoutes = require('./routes/finance');
 const adminRoutes = require('./routes/admin');
+const path = require('path');
 const app = express();
 const port = 3000;
-const path = require('path');
 
+// Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('frontend')); // Serve frontend files
+
+// Serve frontend files
+app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
-app.use('/auth', authRoutes);           // Login, register routes
-app.use('/poll', authMiddleware, pollRoutes);    // User poll routes
+app.use('/auth', authRoutes); // Login, register routes
+app.use('/poll', authMiddleware, pollRoutes); // User poll routes
 app.use('/finance', authMiddleware, financeRoutes); // Finance data for users
 app.use('/admin', authMiddleware, adminRoutes); // Admin routes
 
-
-// Route pre zobrazenie index.html
+// Serve index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'index.html')); // Uprav na správnu cestu
-  });
+    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+});
 
-// Server setup
+// Start server
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
 });
