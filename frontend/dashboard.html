@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>Futbal Dashboard</h2>
+        
+        <div id="user-section">
+            <h3>Current Poll</h3>
+            <form id="poll-form">
+                <label for="poll-response">Your Response:</label>
+                <select id="poll-response" required>
+                    <option value="pridem">I will come</option>
+                    <option value="nepridem">I will not come</option>
+                    <option value="mam_hraca_navyse">I have an extra player</option>
+                </select>
+                <button type="submit">Submit Response</button>
+            </form>
+
+            <h3>Poll Responses</h3>
+            <ul id="poll-responses">
+                <!-- Poll responses will be populated here -->
+            </ul>
+
+            <h3>Your Financial Status</h3>
+            <div id="financial-status">
+                <p>Debts: <span id="debt"></span> EUR</p>
+                <p>Payments: <span id="payments"></span> EUR</p>
+                <p>Balance: <span id="balance"></span> EUR</p>
+            </div>
+        </div>
+
+        <div id="admin-section" style="display: none;">
+            <h3>Admin Zone</h3>
+            <form id="new-poll-form">
+                <label for="poll-date">Date and Time:</label>
+                <input type="datetime-local" id="poll-date" required>
+                
+                <label for="poll-note">Note (optional):</label>
+                <input type="text" id="poll-note">
+
+                <button type="submit">Create New Poll</button>
+            </form>
+
+            <h3>Manage Users</h3>
+            <ul id="user-list">
+                <!-- User list for admins to manage -->
+            </ul>
+
+            <h3>Financial Overview</h3>
+            <ul id="financial-overview">
+                <!-- Financial details of all users -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        async function loadDashboard() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check user type and populate dashboard
+            const userResponse = await fetch('/user', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const userData = await userResponse.json();
+
+            if (userData.username === 'admin') {
+                document.getElementById('admin-section').style.display = 'block';
+                loadAdminData();
+            }
+
+            loadUserData();
+        }
+
+        async function loadUserData() {
+            const token = localStorage.getItem('token');
+
+            // Load financial data
+            const financeResponse = await fetch('/financie', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const financeData = await financeResponse.json();
+            document.getElementById('debt').textContent = financeData.debt;
+            document.getElementById('payments').textContent = financeData.payments;
+            document.getElementById('balance').textContent = financeData.balance;
+
+            // Load poll responses
+            const pollResponse = await fetch('/anketa', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const pollData = await pollResponse.json();
+            const pollResponsesEl = document.getElementById('poll-responses');
+            pollResponsesEl.innerHTML = '';
+            pollData.forEach(response => {
+                const li = document.createElement('li');
+                li.textContent = `${response.username}: ${response.odpoved}`;
+                pollResponsesEl.appendChild(li);
+            });
+        }
+
+        document.getElementById('poll-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const response = document.getElementById('poll-response').value;
+            const token = localStorage.getItem('token');
+
+            await fetch('/anketa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ odpoved: response })
+            });
+            loadUserData();
+        });
+
+        async function loadAdminData() {
+            const token = localStorage.getItem('token');
+
+            // Load user list for admin
+            const usersResponse = await fetch('/users', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            const users = await usersResponse.json();
+            const userList = document.getElementById('user-list');
+            userList.innerHTML = '';
+            users.forEach(user => {
+                const li = document.createElement('li');
+                li.textContent = `${user.username} - Balance: ${user.balance} EUR`;
+                userList.appendChild(li);
+            });
+        }
+
+        document.getElementById('new-poll-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const date = document.getElementById('poll-date').value;
+            const note = document.getElementById('poll-note').value;
+            const token = localStorage.getItem('token');
+
+            await fetch('/admin/anketa', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ date, note })
+            });
+            alert('New poll created');
+            loadUserData();
+        });
+
+        loadDashboard();
+    </script>
+</body>
+</html>

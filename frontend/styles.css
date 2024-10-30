@@ -1,0 +1,3 @@
+body { font-family: Arial, sans-serif; background: #f4f4f9; color: #333; }
+    h1 { text-align: center; }
+    #auth-container { display: flex; justify-content: center; gap: 20px; margin-top: 20px; }
