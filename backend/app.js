@@ -18,6 +18,12 @@ app.use('/poll', authMiddleware, pollRoutes);    // User poll routes
 app.use('/finance', authMiddleware, financeRoutes); // Finance data for users
 app.use('/admin', authMiddleware, adminRoutes); // Admin routes
 
+
+// Route pre zobrazenie index.html
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html')); // Uprav na správnu cestu
+  });
+
 // Server setup
 app.listen(port, () => {
     console.log(`Server running on http://localhost:${port}`);
