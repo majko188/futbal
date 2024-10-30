@@ -29,8 +29,10 @@
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
+            document.getElementById('error-message').textContent = ''; // Clear previous error
+
             try {
-                const response = await fetch('/login', {
+                const response = await fetch('/auth/login', {  // Make sure this matches the backend route
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -41,8 +43,7 @@
                 if (response.ok) {
                     const data = await response.json();
                     localStorage.setItem('token', data.token);
-                    // Redirect based on role if there's an admin check
-                    window.location.href = 'dashboard.html';
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard
                 } else {
                     const error = await response.text();
                     document.getElementById('error-message').textContent = 'Login failed: ' + error;
