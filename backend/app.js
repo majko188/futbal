@@ -7,6 +7,7 @@ const financeRoutes = require('./routes/finance');
 const adminRoutes = require('./routes/admin');
 const app = express();
 const port = 3000;
+const path = require('path');
 
 app.use(cors());
 app.use(express.json());
