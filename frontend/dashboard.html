@@ -85,7 +85,7 @@
             const token = localStorage.getItem('token');
 
             // Load financial data
-            const financeResponse = await fetch('/financie', {
+            const financeResponse = await fetch('/finance', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const financeData = await financeResponse.json();
