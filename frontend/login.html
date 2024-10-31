@@ -30,42 +30,40 @@
             const password = document.getElementById('password').value;
 
             document.getElementById('error-message').textContent = ''; // Clear previous error
+
+            // Define the login function
             async function login(username, password) {
-            try {
-                const response = await fetch('/auth/login', {  // Make sure this matches the backend route
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ username, password }),
-                });
-                if (!response.ok) {
-            throw new Error('Login failed');
-        
+                try {
+                    const response = await fetch('/auth/login', {  // Make sure this matches the backend route
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ username, password }),
+                    });
 
-        // Retrieve user data from the response
-        const data = await response.json();
-        const userId = data.userId; // Assuming the response contains a userId
+                    if (!response.ok) {
+                        const error = await response.text(); // Get the error message
+                        throw new Error('Login failed: ' + error);
+                    }
 
-        // Store userId in local storage (optional)
-        localStorage.setItem('userId', userId);
+                    // Retrieve user data from the response
+                    const data = await response.json();
+                    const userId = data.userId; // Assuming the response contains a userId
 
-                //if (response.ok) {
-                //    const data = await response.json();
-                //    localStorage.setItem('token', data.token);
-                //    window.location.href = 'dashboard.html'; // Redirect to dashboard
-                //} else {
-                //    const error = await response.text();
-                //    document.getElementById('error-message').textContent = 'Login failed: ' + error;
+                    // Store userId in local storage (optional)
+                    localStorage.setItem('userId', userId);
+                    window.location.href = 'dashboard.html'; // Redirect to dashboard
+                } catch (error) {
+                    // Handle errors here
+                    document.getElementById('error-message').textContent = 'Error: ' + error.message;
+                    console.error('Error during login:', error);
                 }
-            //} catch (error) {
-            //    document.getElementById('error-message').textContent = 'Error: ' + error.message;
-        } catch (error) {
-        // Handle errors here
-        console.error('Error during login:', error);
-    }
+            }
 
-        ;
+            // Call the login function
+            login(username, password);
+        });
     </script>
 </body>
 </html>
