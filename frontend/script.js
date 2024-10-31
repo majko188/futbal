@@ -13,7 +13,7 @@ async function registerUser(event) {
 
     if (response.ok) {
         alert('Registration successful');
-        window.location.href = 'login.html'; // Redirect to login page
+        window.location.href = 'login.html';
     } else {
         const error = await response.json();
         alert('Registration failed: ' + error.message);
@@ -42,13 +42,19 @@ async function loginUser(event) {
     }
 }
 
-// Function to fetch poll results and display them
+// Function to fetch poll responses
 async function fetchPollResults() {
     const response = await fetch('/poll', {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
     const data = await response.json();
-    document.getElementById('poll-results').textContent = JSON.stringify(data);
+    const pollResultsEl = document.getElementById('poll-responses');
+    pollResultsEl.innerHTML = ''; // Clear previous responses
+    data.forEach(response => {
+        const li = document.createElement('li');
+        li.textContent = `${response.username}: ${response.odpoved}`;
+        pollResultsEl.appendChild(li);
+    });
 }
 
 // Function to submit a poll response
@@ -76,39 +82,52 @@ async function fetchFinanceData() {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
     });
     const data = await response.json();
-    document.getElementById('finance-data').textContent = 
-        `Dlh: ${data.debt}, Platby: ${data.payments}, Zostatok: ${data.balance}`;
+    document.getElementById('debt').textContent = data.debt;
+    document.getElementById('payments').textContent = data.payments;
+    document.getElementById('balance').textContent = data.balance;
 }
 
+// Function to fetch user details and check for admin privileges
 async function fetchUserDetails() {
-    try {
-        const response = await fetch('/user', {
-            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-        });
-        
-        if (!response.ok) { // Check if response is not successful
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
+    const response = await fetch('/user', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const data = await response.json();
 
-        const data = await response.json();
-        console.log("User details:", data); // Inspect this to ensure data structure is correct
-        return data;
-    } catch (error) {
-        console.error("Error fetching user details:", error);
-        document.getElementById('error-message').textContent = 'Failed to load user details. Please try again.';
+    if (data.isAdmin) {
+        document.getElementById('admin-section').style.display = 'block';
+        loadAdminData();
     }
+
+    return data;
 }
 
+// Admin-only data loading functions
+async function loadAdminData() {
+    const usersResponse = await fetch('/users', {
+        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+    });
+    const users = await usersResponse.json();
+    const userList = document.getElementById('user-list');
+    userList.innerHTML = '';
+    users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = `${user.username} - Balance: ${user.balance} EUR`;
+        userList.appendChild(li);
+    });
+}
 
 // Event listeners
 document.getElementById('login-form')?.addEventListener('submit', loginUser);
 document.getElementById('register-form')?.addEventListener('submit', registerUser);
-document.getElementById('poll-yes')?.addEventListener('click', () => submitPollResponse('pridem'));
-document.getElementById('poll-no')?.addEventListener('click', () => submitPollResponse('nepridem'));
-document.getElementById('poll-extra')?.addEventListener('click', () => submitPollResponse('mam hraca navyse'));
+document.getElementById('poll-form')?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    submitPollResponse(document.getElementById('poll-response').value);
+});
 
-// On load, fetch poll results and finance data if on dashboard
+// On load, fetch user and finance data if on dashboard
 if (window.location.pathname === '/dashboard.html') {
+    fetchUserDetails();
     fetchPollResults();
     fetchFinanceData();
 }
