@@ -34,8 +34,7 @@ async function loginUser(event) {
     });
 
     if (response.ok) {
-        const data = await response.json();
-        localStorage.setItem('token', data.token);
+        alert('Login successful');
         window.location.href = 'dashboard.html';
     } else {
         alert('Login failed');
@@ -44,27 +43,29 @@ async function loginUser(event) {
 
 // Function to fetch poll responses
 async function fetchPollResults() {
-    const response = await fetch('/poll', {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
+    const response = await fetch('/poll');
     const data = await response.json();
+
     const pollResultsEl = document.getElementById('poll-responses');
     pollResultsEl.innerHTML = ''; // Clear previous responses
-    data.forEach(response => {
-        const li = document.createElement('li');
-        li.textContent = `${response.username}: ${response.odpoved}`;
-        pollResultsEl.appendChild(li);
-    });
+
+    // Check that data has a responses array
+    if (data.responses && Array.isArray(data.responses)) {
+        data.responses.forEach(response => {
+            const li = document.createElement('li');
+            li.textContent = `${response.username}: ${response.response}`;
+            pollResultsEl.appendChild(li);
+        });
+    } else {
+        pollResultsEl.textContent = 'No responses available.';
+    }
 }
 
 // Function to submit a poll response
 async function submitPollResponse(responseType) {
     const response = await fetch('/poll', {
         method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ response: responseType })
     });
 
@@ -78,9 +79,7 @@ async function submitPollResponse(responseType) {
 
 // Function to fetch and display user finance data
 async function fetchFinanceData() {
-    const response = await fetch('/finance', {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
+    const response = await fetch('/finance');
     const data = await response.json();
     document.getElementById('debt').textContent = data.debt;
     document.getElementById('payments').textContent = data.payments;
@@ -89,9 +88,7 @@ async function fetchFinanceData() {
 
 // Function to fetch user details and check for admin privileges
 async function fetchUserDetails() {
-    const response = await fetch('/user', {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
+    const response = await fetch('/user');
     const data = await response.json();
 
     if (data.isAdmin) {
@@ -104,9 +101,7 @@ async function fetchUserDetails() {
 
 // Admin-only data loading functions
 async function loadAdminData() {
-    const usersResponse = await fetch('/users', {
-        headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
-    });
+    const usersResponse = await fetch('/users');
     const users = await usersResponse.json();
     const userList = document.getElementById('user-list');
     userList.innerHTML = '';
