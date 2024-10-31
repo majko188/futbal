@@ -6,6 +6,7 @@ const pollRoutes = require('./routes/poll');
 const financeRoutes = require('./routes/finance');
 const adminRoutes = require('./routes/admin');
 const path = require('path');
+const dotenev = require('dotenv').config();
 const app = express();
 const port = 3000;
 
