@@ -42,14 +42,13 @@ async function loginUser(event) {
 }
 
 // Function to fetch poll responses
-async function fetchPollResults() {
-    const response = await fetch('/poll');
+async function fetchPollResults(userId) {
+    const response = await fetch(`/poll?user_id=${userId}`);
     const data = await response.json();
 
     const pollResultsEl = document.getElementById('poll-responses');
-    pollResultsEl.innerHTML = ''; // Clear previous responses
+    pollResultsEl.innerHTML = '';
 
-    // Check that data has a responses array
     if (data.responses && Array.isArray(data.responses)) {
         data.responses.forEach(response => {
             const li = document.createElement('li');
@@ -62,25 +61,28 @@ async function fetchPollResults() {
 }
 
 // Function to submit a poll response
-async function submitPollResponse(responseType) {
+async function submitPollResponse(responseType, userId) {
     const response = await fetch('/poll', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ response: responseType })
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ user_id: userId, response: responseType })
     });
 
     if (response.ok) {
         alert('Response submitted');
-        fetchPollResults(); // Refresh poll results
+        fetchPollResults(userId); // Refresh poll results with userId
     } else {
         alert('Failed to submit response');
     }
 }
 
 // Function to fetch and display user finance data
-async function fetchFinanceData() {
-    const response = await fetch('/finance');
+async function fetchFinanceData(userId) {
+    const response = await fetch(`/finance?user_id=${userId}`);
     const data = await response.json();
+
     document.getElementById('debt').textContent = data.debt;
     document.getElementById('payments').textContent = data.payments;
     document.getElementById('balance').textContent = data.balance;
@@ -122,7 +124,8 @@ document.getElementById('poll-form')?.addEventListener('submit', (e) => {
 
 // On load, fetch user and finance data if on dashboard
 if (window.location.pathname === '/dashboard.html') {
-    fetchUserDetails();
-    fetchPollResults();
-    fetchFinanceData();
+    const userId = /* Get userId from login data or local storage */;
+    fetchPollResults(userId);
+    fetchFinanceData(userId);
+    fetchUserDetails(userId);
 }
