@@ -39,19 +39,29 @@
                     },
                     body: JSON.stringify({ username, password }),
                 });
+                if (!response.ok) {
+            throw new Error('Login failed');
+        }
 
-                if (response.ok) {
-                    const data = await response.json();
-                    localStorage.setItem('token', data.token);
-                    window.location.href = 'dashboard.html'; // Redirect to dashboard
-                } else {
-                    const error = await response.text();
-                    document.getElementById('error-message').textContent = 'Login failed: ' + error;
+        // Retrieve user data from the response
+        const data = await response.json();
+        const userId = data.userId; // Assuming the response contains a userId
+
+        // Store userId in local storage (optional)
+        localStorage.setItem('userId', userId);
+
+                //if (response.ok) {
+                //    const data = await response.json();
+                //    localStorage.setItem('token', data.token);
+                //    window.location.href = 'dashboard.html'; // Redirect to dashboard
+                //} else {
+                //    const error = await response.text();
+                //    document.getElementById('error-message').textContent = 'Login failed: ' + error;
                 }
-            } catch (error) {
-                document.getElementById('error-message').textContent = 'Error: ' + error.message;
+            //} catch (error) {
+            //    document.getElementById('error-message').textContent = 'Error: ' + error.message;
             }
-        });
+        );
     </script>
 </body>
 </html>
