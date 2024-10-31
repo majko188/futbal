@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const authMiddleware = require('./authMiddleware');
+//const authMiddleware = require('./authMiddleware');
 const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/poll');
 const financeRoutes = require('./routes/finance');

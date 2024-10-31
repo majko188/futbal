@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const db = require('../db'); // Adjust this path if necessary to connect to your DB setup
-const authMiddleware = require('../authMiddleware'); // Ensure authMiddleware is set up correctly
+//const authMiddleware = require('../authMiddleware'); // Ensure authMiddleware is set up correctly
 
 // Route to get user information
 router.get('/', async (req, res) => {
