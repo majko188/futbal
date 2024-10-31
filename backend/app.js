@@ -20,9 +20,9 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Routes
 app.use('/auth', authRoutes); // Login, register routes
-app.use('/poll', authMiddleware, pollRoutes); // User poll routes
-app.use('/finance', authMiddleware, financeRoutes); // Finance data for users
-app.use('/admin', authMiddleware, adminRoutes); // Admin routes
+app.use('/poll', pollRoutes); // User poll routes
+app.use('/finance', financeRoutes); // Finance data for users
+app.use('/admin', adminRoutes); // Admin routes
 app.use('/user', userRoutes);   
 
 // Serve index.html
