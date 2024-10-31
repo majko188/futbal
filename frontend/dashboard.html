@@ -94,7 +94,7 @@
             document.getElementById('balance').textContent = financeData.balance;
 
             // Load poll responses
-            const pollResponse = await fetch('/anketa', {
+            const pollResponse = await fetch('/poll', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             const pollData = await pollResponse.json();
@@ -112,7 +112,7 @@
             const response = document.getElementById('poll-response').value;
             const token = localStorage.getItem('token');
 
-            await fetch('/anketa', {
+            await fetch('/poll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -146,7 +146,7 @@
             const note = document.getElementById('poll-note').value;
             const token = localStorage.getItem('token');
 
-            await fetch('/admin/anketa', {
+            await fetch('/admin/poll', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

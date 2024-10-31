@@ -3,7 +3,7 @@ const db = require('../db');
 const router = express.Router();
 
 // Create a new poll (admin only)
-router.post('/anketa', (req, res) => {
+router.post('/poll', (req, res) => {
     const { date, note } = req.body;
     if (!req.user.isAdmin) return res.status(403).send('Unauthorized');
     db.query('INSERT INTO polls (date, note) VALUES (?, ?)', [date, note], (err) => {
