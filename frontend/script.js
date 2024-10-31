@@ -80,6 +80,26 @@ async function fetchFinanceData() {
         `Dlh: ${data.debt}, Platby: ${data.payments}, Zostatok: ${data.balance}`;
 }
 
+async function fetchUserDetails() {
+    try {
+        const response = await fetch('/user', {
+            headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+        });
+        
+        if (!response.ok) { // Check if response is not successful
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log("User details:", data); // Inspect this to ensure data structure is correct
+        return data;
+    } catch (error) {
+        console.error("Error fetching user details:", error);
+        document.getElementById('error-message').textContent = 'Failed to load user details. Please try again.';
+    }
+}
+
+
 // Event listeners
 document.getElementById('login-form')?.addEventListener('submit', loginUser);
 document.getElementById('register-form')?.addEventListener('submit', registerUser);
