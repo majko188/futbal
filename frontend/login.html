@@ -30,7 +30,7 @@
             const password = document.getElementById('password').value;
 
             document.getElementById('error-message').textContent = ''; // Clear previous error
-
+            async function login(username, password) {
             try {
                 const response = await fetch('/auth/login', {  // Make sure this matches the backend route
                     method: 'POST',
@@ -60,7 +60,11 @@
                 }
             //} catch (error) {
             //    document.getElementById('error-message').textContent = 'Error: ' + error.message;
-            }
+        } catch (error) {
+        // Handle errors here
+        console.error('Error during login:', error);
+    }
+
         );
     </script>
 </body>
