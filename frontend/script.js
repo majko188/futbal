@@ -124,7 +124,7 @@ document.getElementById('poll-form')?.addEventListener('submit', (e) => {
 
 // On load, fetch user and finance data if on dashboard
 if (window.location.pathname === '/dashboard.html') {
-    const userId = /* Get userId from login data or local storage */;
+    //const userId = /* Get userId from login data or local storage */;
     fetchPollResults(userId);
     fetchFinanceData(userId);
     fetchUserDetails(userId);
