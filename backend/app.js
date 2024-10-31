@@ -5,6 +5,7 @@ const authRoutes = require('./routes/auth');
 const pollRoutes = require('./routes/poll');
 const financeRoutes = require('./routes/finance');
 const adminRoutes = require('./routes/admin');
+const userRoutes = require('./routes/user');
 const path = require('path');
 const app = express();
 const port = 3000;
