@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
         return res.status(401).json({ error: 'Not logged in' });
     }
 
-    db.query('SELECT username, is_admin, balance FROM users WHERE id = ?', [req.session.userId], (err, results) => {
+    db.query('SELECT username, isAdmin, balance FROM users WHERE id = ?', [req.session.userId], (err, results) => {
         if (err) return res.status(500).json({ error: 'Server error' });
         if (results.length === 0) return res.status(404).json({ error: 'User not found' });
 
