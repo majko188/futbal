@@ -4,59 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Futbal Dashboard</h2>
-        
-        <div id="user-section">
-            <h3>Current Poll</h3>
-            <form id="poll-form">
-                <label for="poll-response">Your Response:</label>
-                <select id="poll-response" required>
-                    <option value="pridem">I will come</option>
-                    <option value="nepridem">I will not come</option>
-                    <option value="mam_hraca_navyse">I have an extra player</option>
-                </select>
-                <button type="submit">Submit Response</button>
-            </form>
-
-            <h3>Poll Responses</h3>
-            <ul id="poll-responses">
-                <!-- Poll responses will be populated here -->
-            </ul>
-
-            <h3>Your Financial Status</h3>
-            <div id="financial-status">
-                <p>Debts: <span id="debt"></span> EUR</p>
-                <p>Payments: <span id="payments"></span> EUR</p>
-                <p>Balance: <span id="balance"></span> EUR</p>
-            </div>
-        </div>
-
-        <div id="admin-section" style="display: none;">
-            <h3>Admin Zone</h3>
-            <form id="new-poll-form">
-                <label for="poll-date">Date and Time:</label>
-                <input type="datetime-local" id="poll-date" required>
-                
-                <label for="poll-note">Note (optional):</label>
-                <input type="text" id="poll-note">
-
-                <button type="submit">Create New Poll</button>
-            </form>
-
-            <h3>Manage Users</h3>
-            <ul id="user-list">
-                <!-- User list for admins to manage -->
-            </ul>
-
-            <h3>Financial Overview</h3>
-            <ul id="financial-overview">
-                <!-- Financial details of all users -->
-            </ul>
-        </div>
+    <h1>Dashboard</h1>
+    <div id="admin-section" style="display: none;">
+        <h2>Admin Section</h2>
+        <p>Welcome, admin! Here you can manage users and view reports.</p>
+    </div>
+    <div id="user-section" style="display: none;">
+        <h2>User Section</h2>
+        <p>Welcome to your dashboard.</p>
     </div>
 
     <script src="script.js"></script>

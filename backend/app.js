@@ -1,36 +1,20 @@
 const express = require('express');
-const cors = require('cors');
-//const authMiddleware = require('./authMiddleware');
-const authRoutes = require('./routes/auth');
-const pollRoutes = require('./routes/poll');
-const financeRoutes = require('./routes/finance');
-const adminRoutes = require('./routes/admin');
-const userRoutes = require('./routes/user');
-const path = require('path');
 const app = express();
-const port = 3000;
-require('dotenv').config();
+const authRouter = require('./routes/auth');
+const userRouter = require('./routes/user');
+const bodyParser = require('body-parser');
+const session = require('express-session');
 
-// Middleware
-app.use(cors());
-app.use(express.json());
+app.use(bodyParser.json());
+app.use(session({
+    secret: 'yourSecretKey',
+    resave: false,
+    saveUninitialized: true
+}));
 
-// Serve frontend files
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use('/auth', authRouter);
+app.use('/user', userRouter);
 
-// Routes
-app.use('/auth', authRoutes); // Login, register routes
-app.use('/poll', pollRoutes); // User poll routes
-app.use('/finance', financeRoutes); // Finance data for users
-app.use('/admin', adminRoutes); // Admin routes
-app.use('/user', userRoutes);   
-
-// Serve index.html
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
-});
-
-// Start server
-app.listen(port, () => {
-    console.log(`Server running on http://localhost:${port}`);
+app.listen(3000, () => {
+    console.log('Server is running on http://localhost:3000');
 });
