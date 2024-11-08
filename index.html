@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app">
+        <div id="login-section">
+            <h2>Login</h2>
+            <form id="login-form">
+                <input type="text" id="username" placeholder="Username" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        <div id="dashboard-section" style="display:none;">
+            <h2>Welcome, <span id="username"></span></h2>
+            <div id="poll"></div>
+            <div id="financial-status">
+                Balance: <span id="balance"></span> EUR
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
