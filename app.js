@@ -49,6 +49,51 @@ app.get('/user', (req, res) => {
   });
 });
 
+app.get('/poll', (req, res) => {
+  db.query('SELECT * FROM polls WHERE status = "active" ORDER BY id DESC LIMIT 1', (err, polls) => {
+      if (err) {
+          console.error("Error fetching poll:", err);
+          return res.status(500).send({ error: "Error fetching poll" });
+      }
+
+      const poll = polls[0];
+      if (!poll) {
+          // Send an empty response or a message indicating no active poll
+          return res.status(404).send({ error: "No active poll found" });
+      }
+
+      // If poll exists, fetch the responses related to it
+      db.query('SELECT * FROM responses WHERE poll_id = ?', [poll.id], (err, responses) => {
+          if (err) {
+              console.error("Error fetching responses:", err);
+              return res.status(500).send({ error: "Error fetching responses" });
+          }
+
+          // Send back the poll and associated responses
+          res.json({ poll, responses });
+      });
+  });
+});
+
+
+// Add a new poll (admin only)
+app.post('/admin/poll', (req, res) => {
+  const { title, dateTime, note } = req.body;
+
+  // Insert new poll as active
+  db.query(
+      'INSERT INTO polls (title, date_time, note, status) VALUES (?, ?, ?, "active")',
+      [title, dateTime, note],
+      (err, result) => {
+          if (err) {
+              console.error("Error adding new poll:", err);
+              return res.status(500).send({ error: "Error adding new poll" });
+          }
+          res.status(201).send({ message: "New poll created successfully" });
+      }
+  );
+});
+
 // Fetch poll data
 app.get('/poll', (req, res) => {
   db.query('SELECT * FROM polls WHERE status = "active" ORDER BY id DESC LIMIT 1', (err, polls) => {

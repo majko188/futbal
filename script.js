@@ -29,3 +29,32 @@ async function loadDashboard() {
     const pollData = await pollResponse.json();
     document.getElementById('poll').textContent = pollData.poll ? pollData.poll.title : 'No active poll';
 }
+
+// Function to create a new poll (admin only)
+async function createPoll(event) {
+    event.preventDefault();
+
+    const title = document.getElementById('poll-title').value;
+    const dateTime = document.getElementById('poll-date').value;
+    const note = document.getElementById('poll-note').value;
+
+    const response = await fetch('/admin/poll', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title, dateTime, note })
+    });
+
+    if (response.ok) {
+        alert('New poll created successfully');
+        document.getElementById('new-poll-form').reset();
+        fetchPollResults(); // Refresh poll results if needed
+    } else {
+        const error = await response.json();
+        alert('Failed to create poll: ' + error.message);
+    }
+}
+
+// Event listener for new poll form submission
+document.getElementById('new-poll-form')?.addEventListener('submit', createPoll);

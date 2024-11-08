@@ -23,6 +23,21 @@
                 Balance: <span id="balance"></span> EUR
             </div>
         </div>
+        <div id="admin-section" style="display: none;">
+            <h3>Create a New Poll</h3>
+            <form id="new-poll-form">
+                <label for="poll-title">Poll Title:</label>
+                <input type="text" id="poll-title" required>
+        
+                <label for="poll-date">Date and Time:</label>
+                <input type="datetime-local" id="poll-date" required>
+                
+                <label for="poll-note">Note (optional):</label>
+                <input type="text" id="poll-note">
+        
+                <button type="submit">Create Poll</button>
+            </form>
+        </div>
     </div>
     <script src="script.js"></script>
 </body>
