@@ -50,7 +50,7 @@ app.get('/user', (req, res) => {
 });
 
 app.get('/poll', (req, res) => {
-  db.query('SELECT * FROM polls WHERE status = "active" ORDER BY id DESC LIMIT 1', (err, polls) => {
+  db.query('SELECT * FROM polls WHERE status = "open" ORDER BY id DESC LIMIT 1', (err, polls) => {
       if (err) {
           console.error("Error fetching poll:", err);
           return res.status(500).send({ error: "Error fetching poll" });
@@ -80,9 +80,9 @@ app.get('/poll', (req, res) => {
 app.post('/admin/poll', (req, res) => {
   const { title, dateTime, note } = req.body;
 
-  // Insert new poll as active
+  // Insert new poll as open
   db.query(
-      'INSERT INTO polls (title, date_time, note, status) VALUES (?, ?, ?, "active")',
+      'INSERT INTO polls (title, date_time, note, status) VALUES (?, ?, ?, "open")',
       [title, dateTime, note],
       (err, result) => {
           if (err) {
@@ -96,7 +96,7 @@ app.post('/admin/poll', (req, res) => {
 
 // Fetch poll data
 app.get('/poll', (req, res) => {
-  db.query('SELECT * FROM polls WHERE status = "active" ORDER BY id DESC LIMIT 1', (err, polls) => {
+  db.query('SELECT * FROM polls WHERE status = "open" ORDER BY id DESC LIMIT 1', (err, polls) => {
     if (err) return res.status(500).send(err);
     const poll = polls[0];
     db.query('SELECT * FROM responses WHERE poll_id = ?', [poll.id], (err, responses) => {
