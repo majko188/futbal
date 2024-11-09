@@ -17,18 +17,71 @@ document.getElementById('login-form').addEventListener('submit', async (e) => {
 });
 
 async function loadDashboard() {
-    const userResponse = await fetch('/user');
-    const userData = await userResponse.json();
+    try {
+        // Fetch user details
+        const userResponse = await fetch('/user');
+        const userData = await userResponse.json();
 
-    document.getElementById('username').textContent = userData.username;
-    document.getElementById('balance').textContent = userData.balance;
-    document.getElementById('login-section').style.display = 'none';
-    document.getElementById('dashboard-section').style.display = 'block';
+        // Update user details on the dashboard
+        document.getElementById('username').textContent = userData.username;
+        document.getElementById('balance').textContent = userData.balance;
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('dashboard-section').style.display = 'block';
 
-    const pollResponse = await fetch('/poll');
-    const pollData = await pollResponse.json();
-    document.getElementById('poll').textContent = pollData.poll ? pollData.poll.title : 'No active poll';
+        // Show admin section if the user is an admin, else show the regular user section
+        if (userData.isAdmin) {
+            document.getElementById('admin-section').style.display = 'block';
+            document.getElementById('user-section').style.display = 'none';
+            loadAdminData(); // Load admin-specific data if needed
+        } else {
+            document.getElementById('user-section').style.display = 'block';
+            document.getElementById('admin-section').style.display = 'none';
+        }
+
+        // Fetch the current poll and display it
+        const pollResponse = await fetch('/poll');
+        const pollData = await pollResponse.json();
+        document.getElementById('poll').textContent = pollData.poll ? pollData.poll.title : 'No active poll';
+
+    } catch (error) {
+        console.error("Error loading dashboard:", error);
+    }
 }
+
+
+// Function to fetch user details and check if the user is an admin
+async function fetchUserDetails() {
+    const response = await fetch('/user');
+    const data = await response.json();
+
+    // Show sections based on the user role
+    if (data.isAdmin) {
+        document.getElementById('admin-section').style.display = 'block';
+        loadAdminData(); // Load admin-specific data if needed
+    } else {
+        document.getElementById('user-section').style.display = 'block';
+    }
+
+    return data;
+}
+
+
+async function loadAdminData() {
+    // Fetch and display any data or controls specific to admin users here
+    const usersResponse = await fetch('/users');
+    const users = await usersResponse.json();
+    const userList = document.getElementById('admin-user-list');
+    userList.innerHTML = '';
+    users.forEach(user => {
+        const li = document.createElement('li');
+        li.textContent = `${user.username} - Balance: ${user.balance} EUR`;
+        userList.appendChild(li);
+    });
+}
+
+
+// Call loadDashboard when the page loads
+document.addEventListener('DOMContentLoaded', loadDashboard);
 
 // Function to create a new poll (admin only)
 async function createPoll(event) {
