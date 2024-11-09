@@ -15,8 +15,8 @@ async function loadDashboard() {
         const userData = await userResponse.json();
 
         // Display user info
-        document.getElementById('username').textContent = userData.username;
-        document.getElementById('balance').textContent = userData.balance;
+        document.getElementById('username').textContent = userData.username || 'Guest';
+        document.getElementById('balance').textContent = userData.balance || 0;
         document.getElementById('login-section').style.display = 'none';
         document.getElementById('dashboard-section').style.display = 'block';
 
