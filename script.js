@@ -32,7 +32,6 @@ async function loadDashboard() {
         if (userData.isAdmin) {
             document.getElementById('admin-section').style.display = 'block';
             document.getElementById('user-section').style.display = 'none';
-            loadAdminData(); // Load admin-specific data if needed
         } else {
             document.getElementById('user-section').style.display = 'block';
             document.getElementById('admin-section').style.display = 'none';
@@ -66,18 +65,6 @@ async function fetchUserDetails() {
 }
 
 
-async function loadAdminData() {
-    // Fetch and display any data or controls specific to admin users here
-    const usersResponse = await fetch('/users');
-    const users = await usersResponse.json();
-    const userList = document.getElementById('admin-user-list');
-    userList.innerHTML = '';
-    users.forEach(user => {
-        const li = document.createElement('li');
-        li.textContent = `${user.username} - Balance: ${user.balance} EUR`;
-        userList.appendChild(li);
-    });
-}
 
 
 // Call loadDashboard when the page loads
