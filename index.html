@@ -75,13 +75,14 @@
         }
 
         function displayFinances(balance, participations) {
-            let financesInfo = `<p>Balance: ${balance.balance}€</p><ul>`;
-            participations.forEach(participation => {
-                financesInfo += `<li>${participation.poll_title}: ${participation.response}</li>`;
-            });
-            financesInfo += `</ul>`;
-            document.getElementById('finances-info').innerHTML = financesInfo;
-        }
+    let balanceAmount = balance ? balance.balance : 0; // Set to 0 if balance is undefined
+    let financesInfo = `<p>Balance: ${balanceAmount}€</p><ul>`;
+    participations.forEach(participation => {
+        financesInfo += `<li>${participation.poll_title}: ${participation.response}</li>`;
+    });
+    financesInfo += `</ul>`;
+    document.getElementById('finances-info').innerHTML = financesInfo;
+}
 
         function displayPastPolls(polls) {
             let pastPollsInfo = '';
