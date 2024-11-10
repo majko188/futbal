@@ -3,45 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Football Poll System</title>
+    <script src="script.js"></script>
 </head>
 <body>
-    <div id="app">
-        <div id="login-section">
-            <h2>Login</h2>
-            <form id="login-form">
-                <input type="text" id="username" placeholder="Username" required>
-                <input type="password" id="password" placeholder="Password" required>
-                <button type="submit">Login</button>
-            </form>
-        </div>
-        <div id="dashboard-section" style="display:none;">
-            <h2>Welcome, <span id="username"></span></h2>
-            <div id="poll"></div>
-            <div id="financial-status">
-                Balance: <span id="balance"></span> EUR
-            </div>
-        </div>
-        <div id="user-section" style="display: none;">
-            <!-- User content here -->
-        </div>
-        <div id="admin-section" style="display: none;">
-            <h3>Create a New Poll</h3>
-            <form id="new-poll-form">
-                <label for="poll-title">Poll Title:</label>
-                <input type="text" id="poll-title" required>
-        
-                <label for="poll-date">Date and Time:</label>
-                <input type="datetime-local" id="poll-date" required>
-                
-                <label for="poll-note">Note (optional):</label>
-                <input type="text" id="poll-note">
-        
-                <button type="submit">Create Poll</button>
-            </form>
-        </div>
+    <div id="login-section">
+        <h1>Welcome</h1>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button onclick="login(document.getElementById('username').value, document.getElementById('password').value)">Login</button>
+        <button onclick="register(document.getElementById('username').value, document.getElementById('password').value)">Register</button>
     </div>
-    <script src="script.js"></script>
+
+    <div id="poll-section" style="display: none;">
+        <h2>Current Poll Status</h2>
+        <div id="poll-info"></div>
+        <button onclick="vote(currentPollId, 'Pridem')">Pridem</button>
+        <button onclick="vote(currentPollId, 'Nepridem')">Nepridem</button>
+        <button onclick="vote(currentPollId, 'Mam hraca navyse')">Mam hraca navyse</button>
+    </div>
+
+    <div id="user-section" style="display: none;">
+        <h2>Your Finances</h2>
+        <div id="finances-info"></div>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <div id="admin-section" style="display: none;">
+        <h2>Admin Area</h2>
+        <button onclick="loadPastPolls()">View Past Polls</button>
+        <button onclick="closePoll()">Close Current Poll</button>
+        <button onclick="createPoll(prompt('Enter date/time:'), prompt('Enter note:'))">Create New Poll</button>
+        <input type="number" id="deposit-user-id" placeholder="User ID">
+        <input type="number" id="deposit-amount" placeholder="Amount">
+        <button onclick="addDeposit(document.getElementById('deposit-user-id').value, document.getElementById('deposit-amount').value)">Add Deposit</button>
+        <input type="number" id="delete-user-id" placeholder="User ID">
+        <button onclick="deleteUser(document.getElementById('delete-user-id').value)">Delete User</button>
+        <button onclick="logout()">Logout</button>
+    </div>
+
+    <script>
+        let currentPollId;
+
+        function showLoginSection() {
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('poll-section').style.display = 'none';
+            document.getElementById('user-section').style.display = 'none';
+            document.getElementById('admin-section').style.display = 'none';
+        }
+
+        function showUserSection() {
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('poll-section').style.display = 'block';
+            document.getElementById('user-section').style.display = 'block';
+            loadPollStatus();
+            loadUserFinances();
+        }
+
+        function showAdminSection() {
+            showUserSection();
+            document.getElementById('admin-section').style.display = 'block';
+        }
+
+        function displayPoll(poll, responses) {
+            currentPollId = poll.id;
+            let pollInfo = `<h3>${poll.title}</h3><p>${poll.note}</p>`;
+            responses.forEach(response => {
+                pollInfo += `<p>${response.username}: ${response.response}</p>`;
+            });
+            document.getElementById('poll-info').innerHTML = pollInfo;
+        }
+
+        function displayFinances(balance, participations) {
+            let financesInfo = `<p>Balance: ${balance.balance}€</p><ul>`;
+            participations.forEach(participation => {
+                financesInfo += `<li>${participation.poll_title}: ${participation.response}</li>`;
+            });
+            financesInfo += `</ul>`;
+            document.getElementById('finances-info').innerHTML = financesInfo;
+        }
+
+        function displayPastPolls(polls) {
+            let pastPollsInfo = '';
+            polls.forEach(poll => {
+                pastPollsInfo += `<p>${poll.title} (${poll.date_time}): ${poll.note || 'No notes'}</p>`;
+            });
+            document.getElementById('admin-section').innerHTML += pastPollsInfo;
+        }
+
+        showLoginSection();
+    </script>
 </body>
 </html>
